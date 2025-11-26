@@ -255,4 +255,4 @@ export default function AdminDashboard() {
                     </div>
                     <Users className="w-12 h-12" style={{color: '#fee2e2'}} />
                   </div>
-                </div>
+                </div>,
