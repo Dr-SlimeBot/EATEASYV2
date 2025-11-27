@@ -922,6 +922,66 @@ export default function AdminDashboard() {
                   </div>
                 </>
               )}
+              
+              <button
+                onClick={handleAddUser}
+                className="w-full py-3 rounded-lg font-semibold"
+                style={{backgroundColor: '#dc2626', color: 'white'}}
+              >
+                Add {userType === 'student' ? 'Student' : 'Staff'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Time Slot Modal */}
+      {showAddSlotModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
+          <div className="w-full max-w-md rounded-2xl p-6" style={{backgroundColor: 'white'}}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold" style={{color: '#dc2626'}}>Add Time Slot</h3>
+              <button onClick={() => setShowAddSlotModal(false)} style={{color: '#6b7280'}}>
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Meal Type</label>
+                <select className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}}>
+                  <option>Breakfast</option>
+                  <option>Lunch</option>
+                  <option>Dinner</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Start Time</label>
+                <input type="time" className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>End Time</label>
+                <input type="time" className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Capacity</label>
+                <input type="number" placeholder="Enter capacity" className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}} />
+              </div>
+
+              <button
+                onClick={handleAddSlot}
+                className="w-full py-3 rounded-lg font-semibold"
+                style={{backgroundColor: '#dc2626', color: 'white'}}
+              >
+                Add Time Slot
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 
 
