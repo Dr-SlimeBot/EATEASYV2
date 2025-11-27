@@ -794,6 +794,134 @@ export default function AdminDashboard() {
               </div>
             </div>
           )}
+                    {activeTab === 'settings' && (
+            <div className="space-y-6">
+              <div className="p-6 rounded-xl" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                <h3 className="text-lg font-semibold mb-6" style={{color: '#dc2626'}}>Admin Profile</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Full Name</label>
+                    <input type="text" value={admin.name} className="w-full px-4 py-2 rounded-lg border" style={{borderColor: '#d1d5db'}} readOnly />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Admin ID</label>
+                    <input type="text" value={admin.adminId} className="w-full px-4 py-2 rounded-lg border" style={{borderColor: '#d1d5db'}} readOnly />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Email</label>
+                    <input type="email" value={admin.email} className="w-full px-4 py-2 rounded-lg border" style={{borderColor: '#d1d5db'}} readOnly />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Role</label>
+                    <input type="text" value={admin.role} className="w-full px-4 py-2 rounded-lg border" style={{borderColor: '#d1d5db'}} readOnly />
+                  </div>
+                </div>
+                <button 
+                  className="mt-6 px-6 py-3 rounded-lg font-semibold"
+                  style={{backgroundColor: '#dc2626', color: 'white'}}>
+                  Change Password
+                </button>
+              </div>
+
+              {/* System Settings */}
+              <div className="p-6 rounded-xl" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                <h3 className="text-lg font-semibold mb-6" style={{color: '#dc2626'}}>System Settings</h3>
+                <div className="space-y-4">
+                  <label className="flex items-center justify-between">
+                    <div>
+                      <span className="font-medium" style={{color: '#374151'}}>Email Notifications</span>
+                      <p className="text-sm" style={{color: '#6b7280'}}>Send email notifications to users</p>
+                    </div>
+                    <input type="checkbox" defaultChecked className="w-5 h-5" style={{accentColor: '#dc2626'}} />
+                  </label>
+                  <label className="flex items-center justify-between">
+                    <div>
+                      <span className="font-medium" style={{color: '#374151'}}>SMS Notifications</span>
+                      <p className="text-sm" style={{color: '#6b7280'}}>Send SMS notifications to users</p>
+                    </div>
+                    <input type="checkbox" defaultChecked className="w-5 h-5" style={{accentColor: '#dc2626'}} />
+                  </label>
+                  <label className="flex items-center justify-between">
+                    <div>
+                      <span className="font-medium" style={{color: '#374151'}}>Auto-approve Bookings</span>
+                      <p className="text-sm" style={{color: '#6b7280'}}>Automatically approve all bookings</p>
+                    </div>
+                    <input type="checkbox" defaultChecked className="w-5 h-5" style={{accentColor: '#dc2626'}} />
+                  </label>
+                  <label className="flex items-center justify-between">
+                    <div>
+                      <span className="font-medium" style={{color: '#374151'}}>Maintenance Mode</span>
+                      <p className="text-sm" style={{color: '#6b7280'}}>Enable maintenance mode for system updates</p>
+                    </div>
+                    <input type="checkbox" className="w-5 h-5" style={{accentColor: '#dc2626'}} />
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* Add User Modal */}
+      {showAddUserModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
+          <div className="w-full max-w-md rounded-2xl p-6" style={{backgroundColor: 'white'}}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold" style={{color: '#dc2626'}}>Add New {userType === 'student' ? 'Student' : 'Staff'}</h3>
+              <button onClick={() => setShowAddUserModal(false)} style={{color: '#6b7280'}}>
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Full Name</label>
+                <input type="text" value={name} onChange={(e)=>setName(e.target.value)} placeholder="Enter full name" className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Email</label>
+                <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)}  placeholder="Enter email" className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}} />
+              </div>
+              {userType === 'student' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Registration Number</label>
+                    <input value={reg} onChange={(e)=>setReg(e.target.value)} type="text" placeholder="Enter registration number" className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Meal Plan</label>
+                    <select className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}}>
+                      <option>Full Board</option>
+                      <option>Lunch Only</option>
+                      <option>Dinner Only</option>
+                    </select>
+                  </div>
+                </>
+              )}
+              {userType === 'staff' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Staff ID</label>
+                    <input type="text" placeholder="Enter staff ID" className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Role</label>
+                    <select className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}}>
+                      <option>Dining Hall Staff</option>
+                      <option>Kitchen Staff</option>
+                      <option>Supervisor</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{color: '#374151'}}>Shift</label>
+                    <select className="w-full px-4 py-3 rounded-lg border outline-none" style={{borderColor: '#d1d5db'}}>
+                      <option>Morning</option>
+                      <option>Afternoon</option>
+                      <option>Evening</option>
+                    </select>
+                  </div>
+                </>
+              )}
 
 
 
