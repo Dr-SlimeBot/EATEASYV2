@@ -18,7 +18,7 @@ export const deleteUser=async(req,res)=>{
             console.log("Not Allowed")
         }
     }catch{
-        console.log("pakaipa");
+        console.log("hiram_lodge");
     }
 
 }

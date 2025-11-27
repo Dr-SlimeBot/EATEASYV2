@@ -1,7 +1,7 @@
 import bycrpt from 'bcrypt';
 import User from '../models/User.js';
 export const Authenticate=async(req,res)=>{
-    const user=await User.find({name:req.body.email})
+    const user=await User.find({email:req.body.email})
     console.log(user);
     if(user==null){
         return res.status(400).send("Can't find user")
