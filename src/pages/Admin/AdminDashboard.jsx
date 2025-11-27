@@ -428,6 +428,373 @@ export default function AdminDashboard() {
               </div>
             </div>
           )}
+          
+          {activeTab === 'users' && (
+            <div className="space-y-6">
+              {/* Tabs for Students and Staff */}
+              <div className="flex gap-4 border-b" style={{borderColor: '#e5e7eb'}}>
+                <button
+                  onClick={() => setUserType('student')}
+                  className="pb-3 px-4 font-medium transition-all"
+                  style={{
+                    borderBottom: userType === 'student' ? '3px solid #dc2626' : 'none',
+                    color: userType === 'student' ? '#dc2626' : '#6b7280'
+                  }}
+                >
+                  Students ({students.length})
+                </button>
+                <button
+                  onClick={() => setUserType('staff')}
+                  className="pb-3 px-4 font-medium transition-all"
+                  style={{
+                    borderBottom: userType === 'staff' ? '3px solid #dc2626' : 'none',
+                    color: userType === 'staff' ? '#dc2626' : '#6b7280'
+                  }}
+                >
+                  Staff ({staffList.length})
+                </button>
+              </div>
+
+              {/* Search and Add */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{color: '#9ca3af'}} />
+                  <input
+                    type="text"
+                    placeholder={`Search ${userType}s...`}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 rounded-lg border outline-none"
+                    style={{borderColor: '#d1d5db'}}
+                  />
+                </div>
+                <button
+                  onClick={() => setShowAddUserModal(true)}
+                  className="px-6 py-3 rounded-lg font-medium flex items-center gap-2"
+                  style={{backgroundColor: '#dc2626', color: 'white'}}
+                >
+                  <Plus className="w-5 h-5" />
+                  Add {userType === 'student' ? 'Student' : 'Staff'}
+                </button>
+              </div>
+
+              {/* Users List */}
+              {userType === 'student' && (
+                <div className="space-y-3">
+                  {filteredStudents.map((student) => (
+                    <div key={student.id} className="p-6 rounded-xl" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                      <div className="flex flex-col sm:flex-row justify-between gap-4">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 rounded-lg flex items-center justify-center font-bold" style={{backgroundColor: '#fee2e2', color: '#dc2626'}}>
+                            {student.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <div>
+                            <h4 className="text-lg font-semibold" style={{color: '#dc2626'}}>{student.name}</h4>
+                            <p className="text-sm" style={{color: '#6b7280'}}>{student.regNo} • {student.email}</p>
+                            <div className="flex items-center gap-3 mt-2">
+                              <span className="text-xs px-2 py-1 rounded-full" style={{backgroundColor: '#dbeafe', color: '#1e3a8a'}}>
+                                {student.mealPlan}
+                              </span>
+                              <span className="text-xs px-2 py-1 rounded-full" style={{
+                                backgroundColor: student.status === 'active' ? '#dcfce7' : '#fee2e2',
+                                color: student.status === 'active' ? '#166534' : '#991b1b'
+                              }}>
+                                {student.status}
+                              </span>
+                              <span className="text-xs" style={{color: '#6b7280'}}>
+                                {student.bookings} bookings
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex sm:flex-col gap-2">
+                          <button className="px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2" style={{backgroundColor: '#f3f4f6', color: '#dc2626'}}>
+                            <Edit className="w-4 h-4" />
+                            Edit
+                          </button>
+                          <button className="px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2" style={{backgroundColor: '#fee2e2', color: '#dc2626'}}>
+                            <Trash2 className="w-4 h-4" />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {userType === 'staff' && (
+                <div className="space-y-3">
+                  {filteredStaff.map((staff) => (
+                    <div key={staff.id} className="p-6 rounded-xl" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                      <div className="flex flex-col sm:flex-row justify-between gap-4">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 rounded-lg flex items-center justify-center font-bold" style={{backgroundColor: '#fee2e2', color: '#dc2626'}}>
+                            {staff.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <div>
+                            <h4 className="text-lg font-semibold" style={{color: '#dc2626'}}>{staff.name}</h4>
+                            <p className="text-sm" style={{color: '#6b7280'}}>{staff.staffId} • {staff.email}</p>
+                            <div className="flex items-center gap-3 mt-2">
+                              <span className="text-xs px-2 py-1 rounded-full" style={{backgroundColor: '#dbeafe', color: '#1e3a8a'}}>
+                                {staff.role}
+                              </span>
+                              <span className="text-xs px-2 py-1 rounded-full" style={{backgroundColor: '#fef3c7', color: '#92400e'}}>
+                                {staff.shift}
+                              </span>
+                              <span className="text-xs px-2 py-1 rounded-full" style={{
+                                backgroundColor: staff.status === 'active' ? '#dcfce7' : '#fee2e2',
+                                color: staff.status === 'active' ? '#166534' : '#991b1b'
+                              }}>
+                                {staff.status}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex sm:flex-col gap-2">
+                          <button className="px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2" style={{backgroundColor: '#f3f4f6', color: '#dc2626'}}>
+                            <Edit className="w-4 h-4" />
+                            Edit
+                          </button>
+                          <button className="px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2" style={{backgroundColor: '#fee2e2', color: '#dc2626'}}>
+                            <Trash2 className="w-4 h-4" />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'slots' && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-semibold" style={{color: '#dc2626'}}>Time Slot Management</h3>
+                <button
+                  onClick={() => setShowAddSlotModal(true)}
+                  className="px-6 py-3 rounded-lg font-medium flex items-center gap-2"
+                  style={{backgroundColor: '#dc2626', color: 'white'}}
+                >
+                  <Plus className="w-5 h-5" />
+                  Add Time Slot
+                </button>
+              </div>
+
+              <div className="grid gap-4">
+                {timeSlots.map((slot) => (
+                  <div key={slot.id} className="p-6 rounded-xl" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                    <div className="flex flex-col sm:flex-row justify-between gap-4">
+                      <div className="flex items-start gap-4">
+                        <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{backgroundColor: '#fee2e2'}}>
+                          <Clock className="w-8 h-8" style={{color: '#dc2626'}} />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-lg font-semibold mb-1" style={{color: '#dc2626'}}>{slot.meal}</h4>
+                          <p className="text-sm mb-3" style={{color: '#6b7280'}}>Time: {slot.timeRange}</p>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between text-sm">
+                              <span style={{color: '#6b7280'}}>Capacity</span>
+                              <span className="font-semibold" style={{color: '#dc2626'}}>
+                                {slot.currentBookings}/{slot.capacity}
+                              </span>
+                            </div>
+                            <div className="w-full h-3 rounded-full overflow-hidden" style={{backgroundColor: '#e5e7eb'}}>
+                              <div 
+                                className="h-full transition-all"
+                                style={{
+                                  width: `${(slot.currentBookings / slot.capacity) * 100}%`,
+                                  backgroundColor: slot.currentBookings / slot.capacity > 0.8 ? '#dc2626' : '#059669'
+                                }}
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs px-2 py-1 rounded-full" style={{
+                                backgroundColor: slot.status === 'active' ? '#dcfce7' : '#fee2e2',
+                                color: slot.status === 'active' ? '#166534' : '#991b1b'
+                              }}>
+                                {slot.status}
+                              </span>
+                              <span className="text-xs" style={{color: '#6b7280'}}>
+                                {slot.capacity - slot.currentBookings} slots available
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex sm:flex-col gap-2">
+                        <button className="px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2" style={{backgroundColor: '#f3f4f6', color: '#dc2626'}}>
+                          <Edit className="w-4 h-4" />
+                          Edit
+                        </button>
+                        <button className="px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2" style={{backgroundColor: '#fee2e2', color: '#dc2626'}}>
+                          <Trash2 className="w-4 h-4" />
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'analytics' && (
+            <div className="space-y-6">
+              {/* Weekly Overview Chart */}
+              <div className="p-6 rounded-xl" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                <h3 className="text-lg font-semibold mb-6" style={{color: '#dc2626'}}>Weekly Bookings Overview</h3>
+                <div className="space-y-4">
+                  {weeklyData.map((day) => (
+                    <div key={day.day}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium" style={{color: '#374151'}}>{day.day}</span>
+                        <span className="text-sm font-semibold" style={{color: '#dc2626'}}>
+                          {day.breakfast + day.lunch + day.dinner} total
+                        </span>
+                      </div>
+                      <div className="flex gap-1 h-8">
+                        <div 
+                          className="rounded transition-all hover:opacity-80"
+                          style={{
+                            width: `${(day.breakfast / 150) * 100}%`,
+                            backgroundColor: '#fca5a5'
+                          }}
+                          title={`Breakfast: ${day.breakfast}`}
+                        />
+                        <div 
+                          className="rounded transition-all hover:opacity-80"
+                          style={{
+                            width: `${(day.lunch / 150) * 100}%`,
+                            backgroundColor: '#dc2626'
+                          }}
+                          title={`Lunch: ${day.lunch}`}
+                        />
+                        <div 
+                          className="rounded transition-all hover:opacity-80"
+                          style={{
+                            width: `${(day.dinner / 150) * 100}%`,
+                            backgroundColor: '#991b1b'
+                          }}
+                          title={`Dinner: ${day.dinner}`}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{borderTop: '1px solid #e5e7eb'}}>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded" style={{backgroundColor: '#fca5a5'}} />
+                    <span className="text-sm" style={{color: '#6b7280'}}>Breakfast</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded" style={{backgroundColor: '#dc2626'}} />
+                    <span className="text-sm" style={{color: '#6b7280'}}>Lunch</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded" style={{backgroundColor: '#991b1b'}} />
+                    <span className="text-sm" style={{color: '#6b7280'}}>Dinner</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Meal Distribution */}
+              <div className="grid lg:grid-cols-3 gap-6">
+                <div className="p-6 rounded-xl text-center" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                  <h4 className="text-sm font-medium mb-4" style={{color: '#6b7280'}}>Breakfast Bookings</h4>
+                  <p className="text-4xl font-bold mb-2" style={{color: '#dc2626'}}>585</p>
+                  <p className="text-sm" style={{color: '#059669'}}>↑ 12% from last week</p>
+                </div>
+                <div className="p-6 rounded-xl text-center" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                  <h4 className="text-sm font-medium mb-4" style={{color: '#6b7280'}}>Lunch Bookings</h4>
+                  <p className="text-4xl font-bold mb-2" style={{color: '#dc2626'}}>858</p>
+                  <p className="text-sm" style={{color: '#059669'}}>↑ 8% from last week</p>
+                </div>
+                <div className="p-6 rounded-xl text-center" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                  <h4 className="text-sm font-medium mb-4" style={{color: '#6b7280'}}>Dinner Bookings</h4>
+                  <p className="text-4xl font-bold mb-2" style={{color: '#dc2626'}}>685</p>
+                  <p className="text-sm" style={{color: '#059669'}}>↑ 5% from last week</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'reports' && (
+            <div className="space-y-6">
+              <div className="p-6 rounded-xl" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                <h3 className="text-lg font-semibold mb-4" style={{color: '#dc2626'}}>Generate Reports</h3>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <button className="p-6 rounded-lg border-2 transition-all hover:scale-105 text-left" style={{borderColor: '#e5e7eb'}}>
+                    <FileText className="w-10 h-10 mb-3" style={{color: '#dc2626'}} />
+                    <h4 className="font-semibold mb-2" style={{color: '#dc2626'}}>Daily Report</h4>
+                    <p className="text-sm mb-4" style={{color: '#6b7280'}}>Generate today's booking and meal service report</p>
+                    <div className="flex items-center gap-2 text-sm font-medium" style={{color: '#dc2626'}}>
+                      <Download className="w-4 h-4" />
+                      Generate PDF
+                    </div>
+                  </button>
+                  <button className="p-6 rounded-lg border-2 transition-all hover:scale-105 text-left" style={{borderColor: '#e5e7eb'}}>
+                    <FileText className="w-10 h-10 mb-3" style={{color: '#dc2626'}} />
+                    <h4 className="font-semibold mb-2" style={{color: '#dc2626'}}>Weekly Report</h4>
+                    <p className="text-sm mb-4" style={{color: '#6b7280'}}>Generate this week's comprehensive report</p>
+                    <div className="flex items-center gap-2 text-sm font-medium" style={{color: '#dc2626'}}>
+                      <Download className="w-4 h-4" />
+                      Generate PDF
+                    </div>
+                  </button>
+                  <button className="p-6 rounded-lg border-2 transition-all hover:scale-105 text-left" style={{borderColor: '#e5e7eb'}}>
+                    <FileText className="w-10 h-10 mb-3" style={{color: '#dc2626'}} />
+                    <h4 className="font-semibold mb-2" style={{color: '#dc2626'}}>Monthly Report</h4>
+                    <p className="text-sm mb-4" style={{color: '#6b7280'}}>Generate monthly analytics and trends</p>
+                    <div className="flex items-center gap-2 text-sm font-medium" style={{color: '#dc2626'}}>
+                      <Download className="w-4 h-4" />
+                      Generate PDF
+                    </div>
+                  </button>
+                  <button className="p-6 rounded-lg border-2 transition-all hover:scale-105 text-left" style={{borderColor: '#e5e7eb'}}>
+                    <FileText className="w-10 h-10 mb-3" style={{color: '#dc2626'}} />
+                    <h4 className="font-semibold mb-2" style={{color: '#dc2626'}}>Custom Report</h4>
+                    <p className="text-sm mb-4" style={{color: '#6b7280'}}>Generate custom report with date range</p>
+                    <div className="flex items-center gap-2 text-sm font-medium" style={{color: '#dc2626'}}>
+                      <Download className="w-4 h-4" />
+                      Generate PDF
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* Recent Reports */}
+              <div className="p-6 rounded-xl" style={{backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+                <h3 className="text-lg font-semibold mb-4" style={{color: '#dc2626'}}>Recent Reports</h3>
+                <div className="space-y-3">
+                  {[
+                    { name: 'Daily Report - Nov 22, 2025', size: '2.4 MB', date: 'Today' },
+                    { name: 'Weekly Report - Week 47', size: '5.1 MB', date: 'Yesterday' },
+                    { name: 'Monthly Report - October 2025', size: '12.8 MB', date: '5 days ago' }
+                  ].map((report, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-4 rounded-lg" style={{backgroundColor: '#f9fafb', border: '1px solid #e5e7eb'}}>
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor: '#fee2e2'}}>
+                          <FileText className="w-5 h-5" style={{color: '#dc2626'}} />
+                        </div>
+                        <div>
+                          <p className="font-medium" style={{color: '#374151'}}>{report.name}</p>
+                          <p className="text-sm" style={{color: '#6b7280'}}>{report.size} • {report.date}</p>
+                        </div>
+                      </div>
+                      <button className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2" style={{backgroundColor: '#fee2e2', color: '#dc2626'}}>
+                        <Download className="w-4 h-4" />
+                        Download
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
 
 
                 
